@@ -1,0 +1,39 @@
+services:
+  nginx :
+    build:
+      context : .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - "8080:80"
+      - "8082:82"
+      - "8081:81"
+    networks : 
+      - internal
+
+  app :
+    container_name: app
+    build : 
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - internal
+
+  api-01:
+    container_name: api-01
+    image: mrpachara/api-01-fpm:latest
+    environment:
+      - ACCESS_TOKEN=1234
+    networks:
+      - internal
+
+  api-02:
+    container_name: api-02
+    image: fourthtanachard/api-02:latest
+    environment:
+      - ACCESS_TOKEN=1234
+    networks:
+      - internal
+      
+networks:
+  internal:
+    driver: bridge
